@@ -1,33 +1,39 @@
 import React from "react";
-
-const features = [
-  {
-    title: "AI-Powered Tax Optimization 📊",
-    description: "Find every possible deduction and reduce tax liability using AI.",
-  },
-  {
-    title: "Automated Tax Filing ⚡",
-    description: "Auto-fill and file your taxes with a click.",
-  },
-  {
-    title: "Smart Tax Wallet 💰",
-    description: "Real-time tax tracking & categorized savings.",
-  },
-  {
-    title: "Audit Risk Analyzer 🔍",
-    description: "Predict & avoid tax audit risks effortlessly.",
-  },
-  {
-    title: "AI-Powered Tax Advocacy 🤖",
-    description: "Legal AI-backed arguments to claim deductions.",
-  },
-  {
-    title: "Crowdsourced Tax Insights 📢",
-    description: "Compare your tax savings with anonymized users.",
-  }
-];
+import { useNavigate } from "react-router-dom";
 
 const Features = () => {
+  const navigate = useNavigate(); // Navigation hook
+
+  const features = [
+    {
+      title: "AI-Powered Tax Optimization 📊",
+      description: "Find every possible deduction and reduce tax liability using AI.",
+    },
+    {
+      title: "Automated Tax Filing ⚡",
+      description: "Auto-fill and file your taxes with a click.",
+    },
+    {
+      title: "Smart Tax Wallet 💰",
+      description: "Real-time tax tracking & categorized savings.",
+    },
+    {
+      title: "Audit Risk Analyzer 🔍",
+      description: "Predict & avoid tax audit risks effortlessly.",
+    },
+    {
+      title: "AI-Powered Tax Advocacy 🤖",
+      description: "Get AI-backed legal arguments for tax deductions.",
+      buttonText: "Ask AI",
+      onClick: () => window.location.href = "/ai-chatbot" // ✅ Fix navigation issue
+    }
+    ,
+    {
+      title: "Crowdsourced Tax Insights 📢",
+      description: "Compare your tax savings with anonymized users.",
+    }
+  ];
+
   return (
     <section className="py-12 bg-black text-white">
       <h2 className="text-center text-4xl font-bold">Why Choose AstraTax?</h2>
@@ -36,7 +42,14 @@ const Features = () => {
           <div key={index} className="p-6 bg-gray-900 rounded-lg shadow-md">
             <h3 className="text-xl font-bold">{feature.title}</h3>
             <p className="text-gray-400">{feature.description}</p>
-            <a href="#" className="text-yellow-500 mt-2 block">Learn More →</a>
+            {feature.buttonText && feature.onClick && (
+              <button
+                onClick={feature.onClick}
+                className="mt-4 bg-yellow-500 text-black px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600"
+              >
+                {feature.buttonText}
+              </button>
+            )}
           </div>
         ))}
       </div>
