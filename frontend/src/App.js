@@ -9,6 +9,8 @@ import Pricing from "./components/pricing";
 import CTA from "./components/CTA";
 import Footer from "./components/footer";
 import TaxForm from "./components/taxform";
+import SignUp from "./components/SignUp";
+import SignIn from "./components/SignIn";
 import AIChatbot from "./components/AIChatbot";
 
 function HomePage({ handleTaxCalculation, taxResult, taxError }) {
@@ -85,6 +87,8 @@ function App() {
           }
         />
         <Route path="/ai-chatbot" element={<AIChatbot />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
       </Routes>
     </Router>
   );

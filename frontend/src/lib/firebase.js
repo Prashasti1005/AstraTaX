@@ -25,4 +25,4 @@ export const signInWithGoogle = () => {
     });
 };
 
-export { auth };
+export { auth, provider };
