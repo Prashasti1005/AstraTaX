@@ -1,5 +1,5 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Body
-from google.cloud import vision, bigquery
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from google.cloud import vision, bigquery, storage
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth
 import os
@@ -11,16 +11,23 @@ from pydantic import BaseModel
 load_dotenv()
 
 # ✅ Initialize Google Gemini AI
-genai.configure(api_key=os.getenv("AIzaSyD9I2olKeQr15F8Dc6s4AkRvOwoZST7NCg"))  # Store API key in .env
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 gemini_model = genai.GenerativeModel("gemini-pro")
 
-# ✅ Initialize FastAPI app
-app = FastAPI()
-client = bigquery.Client()
+# ✅ Google Cloud Clients
+storage_client = storage.Client()
+vision_client = vision.ImageAnnotatorClient()
+bigquery_client = bigquery.Client()
 
 # ✅ Firebase Setup
-cred = credentials.Certificate("firebase_key.json")  # Ensure this path is correct
+cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
+
+# 🔹 Environment Variables
+BUCKET_NAME = os.getenv("GCS_BUCKET_NAME")
+
+# ✅ FastAPI App
+app = FastAPI()
 
 # 🔹 Pydantic Models
 class AIRequest(BaseModel):
@@ -32,39 +39,71 @@ class TaxInput(BaseModel):
     regime: str
 
 class LoginRequest(BaseModel):
-    id_token: str  # Token received from frontend
+    id_token: str
 
-# ✅ AI Chatbot using Gemini & BigQuery Tax Database
+# ✅ Upload Document to Google Cloud
+@app.post("/upload-document")
+async def upload_document():
+    try:
+        bucket = storage_client.bucket(BUCKET_NAME)
+        blob = bucket.blob("sample_tax_document.pdf")
+        blob.upload_from_filename("sample_tax_document.pdf")
+        return {"message": "Document uploaded to Cloud Storage"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ✅ Extract Text using Google Cloud Vision
+@app.post("/ocr")
+async def extract_text():
+    try:
+        image = vision.Image(source=vision.ImageSource(gcs_image_uri=f"gs://{BUCKET_NAME}/sample_tax_document.pdf"))
+        response = vision_client.document_text_detection(image=image)
+        extracted_text = response.text_annotations[0].description if response.text_annotations else "No text detected"
+        return {"extracted_text": extracted_text}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ✅ Analyze Tax with BigQuery
+@app.post("/analyze-tax")
+async def analyze_tax():
+    try:
+        query = "SELECT tax_deductions FROM `your-project.tax_dataset.tax_analysis_model`"
+        results = bigquery_client.query(query).result()
+        deductions = [row.tax_deductions for row in results]
+        return {"deductions": deductions}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ✅ Auto-File Taxes
+@app.post("/auto-file")
+async def auto_file():
+    return {"message": "Tax return filed successfully!"}
+
+# ✅ AI Chatbot with Gemini & BigQuery
 @app.post("/ask-ai/")
 async def ask_ai(query: AIRequest):
-    """Processes tax-related queries using Gemini AI & BigQuery tax database."""
     try:
-        # 🔹 Query tax database for relevant information
         query_text = f"""
         SELECT response FROM tax_data 
         WHERE LOWER(question) LIKE LOWER('%{query.query}%')
         LIMIT 1
         """
-        results = client.query(query_text).result()
+        results = bigquery_client.query(query_text).result()
         tax_data = [row.response for row in results]
 
-        # 🔹 Use Gemini AI with tax knowledge
         ai_prompt = f"Provide an accurate tax answer using the given tax law data: {tax_data}. \nQuestion: {query.query}"
         response = gemini_model.generate_content(ai_prompt)
 
         return {"answer": response.text if response else "No relevant tax data found."}
-
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-# ✅ AI-Powered Tax Calculation
+# ✅ AI Tax Calculation
 @app.post("/calculate-tax")
 def calculate_tax(data: TaxInput):
-    """Determine tax based on the selected regime and provide AI-generated suggestions."""
     taxable_income = max(0, data.income - data.deductions)
 
     def calculate_new_regime_tax(income):
-        """New Tax Regime (2023-24)"""
         tax_slabs = [(300000, 0.0), (600000, 5), (900000, 10), (1200000, 15), (1500000, 20), (float("inf"), 30)]
         tax = 0
         prev_limit = 0
@@ -76,7 +115,6 @@ def calculate_tax(data: TaxInput):
         return tax
 
     def calculate_old_regime_tax(income):
-        """Old Tax Regime (2023-24)"""
         tax_slabs = [(250000, 0.0), (500000, 5), (1000000, 20), (float("inf"), 30)]
         tax = 0
         prev_limit = 0
@@ -94,7 +132,7 @@ def calculate_tax(data: TaxInput):
     try:
         ai_suggestion = gemini_model.generate_content(ai_prompt).text
     except:
-        ai_suggestion = "AI tax-saving suggestions unavailable at the moment."
+        ai_suggestion = "AI tax-saving suggestions unavailable."
 
     return {"tax": round(tax, 2), "suggestion": ai_suggestion}
 
@@ -107,12 +145,12 @@ def login(request: LoginRequest):
     except:
         raise HTTPException(status_code=401, detail="Invalid Token")
 
-# ✅ Ping Route (For Health Check)
+# ✅ Ping for Health Check
 @app.get("/ping")
 def ping():
     return {"message": "pong"}
 
-# ✅ File Upload Route
+# ✅ File Upload
 @app.post("/upload-file")
 async def upload_file(file: UploadFile = File(...)):
     return {"filename": file.filename}
