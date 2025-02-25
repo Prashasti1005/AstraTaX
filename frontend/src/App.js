@@ -13,9 +13,14 @@ import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AIChatbot from "./components/AIChatbot";
 
+// ✅ Import the missing pages
+import PrivacyPolicy from "./components/privacy";
+import TermsOfService from "./components/terms";
+import ContactUs from "./components/contact";
+
 function HomePage({ handleTaxCalculation, taxResult, taxError }) {
   return (
-    <div className="bg-black text-white">
+    <div className="bg-black text-black">
       <Navbar />
       <HeroSection />
       <FeaturesSection />
@@ -23,7 +28,7 @@ function HomePage({ handleTaxCalculation, taxResult, taxError }) {
       <Testimonials />
       <Pricing />
       <TaxForm onSubmit={handleTaxCalculation} />
-      
+
       {/* Show Tax Result if Available */}
       {taxResult && (
         <div className="text-center p-4 bg-gray-900 mt-6 rounded-lg shadow-md">
@@ -43,7 +48,6 @@ function HomePage({ handleTaxCalculation, taxResult, taxError }) {
       )}
 
       <CTA />
-      <Footer />
     </div>
   );
 }
@@ -75,6 +79,7 @@ function App() {
 
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route
           path="/"
@@ -89,7 +94,13 @@ function App() {
         <Route path="/ai-chatbot" element={<AIChatbot />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+
+        {/* ✅ Add missing routes */}
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/contact" element={<ContactUs />} />
       </Routes>
+      <Footer /> {/* ✅ Footer appears only once here */}
     </Router>
   );
 }
