@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, provider } from "../lib/firebase"; // ✅ Correct Firebase import
+import { auth, provider } from "../lib/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 const SignUp = () => {
@@ -9,8 +9,6 @@ const SignUp = () => {
     username: "",
     email: "",
     password: "",
-    role: "",
-    skills: "",
   });
 
   const navigate = useNavigate();
@@ -24,7 +22,7 @@ const SignUp = () => {
     try {
       await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       alert("Account Created Successfully!");
-      navigate("/dashboard"); // Redirect after sign up
+      navigate("/dashboard");
     } catch (error) {
       alert(error.message);
     }
@@ -41,78 +39,70 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-yellow-400 to-orange-500 font-poppins">
-      {/* Left Side */}
-      <div className="w-1/2 flex justify-center items-center">
-        <img src="C:\Users\Prashasti Singh\google girl\astratax\frontend\src\media\4.png" alt="Sign Up" className="w-3/4 drop-shadow-lg" />
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#121212] to-[#1E1E1E] font-poppins">
+      {/* Glassmorphism Card */}
+      <div className="w-full max-w-md p-8 backdrop-blur-md bg-white/10 border border-white/20 rounded-3xl shadow-2xl">
+        <h2 className="text-3xl font-bold text-white text-center">Create Your AstraTax Account</h2>
+        <p className="text-gray-400 text-center mb-6">Simplify your taxes with AI-powered insights.</p>
 
-      {/* Right Side */}
-      <div className="w-1/2 flex justify-center items-center">
-        <div className="bg-white p-10 rounded-3xl shadow-xl w-96">
-          <h2 className="text-3xl font-bold text-gray-800 text-center">Create your account</h2>
-          <p className="text-gray-500 text-center mb-6">Join AstraTax and simplify your taxes!</p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              required
-            />
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              required
-            />
-          
-
-            <button
-              type="submit"
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-lg transition duration-300"
-            >
-              Sign Up
-            </button>
-          </form>
-
-          <div className="text-center my-4 text-gray-500">or</div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            onChange={handleChange}
+            className="w-full p-3 bg-transparent border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            className="w-full p-3 bg-transparent border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            onChange={handleChange}
+            className="w-full p-3 bg-transparent border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="w-full p-3 bg-transparent border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
 
           <button
-            onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 rounded-lg shadow-sm transition duration-300"
+            type="submit"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg"
           >
-            <img src="/media/google-icon.png" alt="Google Logo" className="w-5 h-5" />
-            Sign up with Google
+            Sign Up
           </button>
+        </form>
 
-          <p className="mt-4 text-center text-gray-600">
-            Already have an account?{" "}
-            <a href="/signin" className="text-yellow-500 font-bold hover:underline">
-              Log in
-            </a>
-          </p>
-        </div>
+        <div className="text-center my-4 text-gray-400">— OR —</div>
+
+        <button
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center gap-2 bg-white/20 border border-gray-500 hover:border-yellow-400 text-white font-semibold py-3 rounded-lg shadow-lg transition duration-300 hover:bg-yellow-500 hover:text-black transform hover:scale-105"
+        >
+          <img src="/media/google-icon.png" alt="Google Logo" className="w-5 h-5" />
+          Sign up with Google
+        </button>
+
+        <p className="mt-4 text-center text-gray-400">
+          Already have an account?{" "}
+          <a href="/signin" className="text-yellow-400 font-bold hover:underline">
+            Log in
+          </a>
+        </p>
       </div>
     </div>
   );

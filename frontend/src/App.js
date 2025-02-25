@@ -12,13 +12,21 @@ import TaxForm from "./components/taxform";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import AIChatbot from "./components/AIChatbot";
-
-// ✅ Import the missing pages
 import PrivacyPolicy from "./components/privacy";
 import TermsOfService from "./components/terms";
 import ContactUs from "./components/contact";
+import FloatingChatbot from "./components/FloatingChatbot"; 
 
-function HomePage({ handleTaxCalculation, taxResult, taxError }) {
+function HomePage({ 
+  handleTaxCalculation, 
+  taxResult, 
+  taxError, 
+  handleFileUpload, 
+  extractedText, 
+  fileUploadError,
+  handleChatbotQuery,
+  chatbotResponse
+}) {
   return (
     <div className="bg-black text-black">
       <Navbar />
@@ -27,9 +35,51 @@ function HomePage({ handleTaxCalculation, taxResult, taxError }) {
       <HowItWorks />
       <Testimonials />
       <Pricing />
-      <TaxForm onSubmit={handleTaxCalculation} />
 
-      {/* Show Tax Result if Available */}
+      {/* ✅ File Upload Section */}
+      <div className="my-8 flex justify-center">
+        <input 
+          type="file" 
+          onChange={handleFileUpload} 
+          className="text-white cursor-pointer bg-gray-800 p-3 rounded-lg border border-gray-600"
+        />
+      </div>
+
+      {/* ✅ Show Extracted Text if Available */}
+      {extractedText && (
+        <div className="text-center p-4 bg-gray-900 mt-6 rounded-lg shadow-md">
+          <h2 className="text-lg font-semibold text-yellow-400">📄 Extracted Text:</h2>
+          <p className="text-sm text-gray-300 mt-2">{extractedText}</p>
+        </div>
+      )}
+
+      {/* ✅ Show Error if File Upload Fails */}
+      {fileUploadError && (
+        <div className="text-center p-4 bg-red-800 mt-6 rounded-lg">
+          <h2 className="text-lg font-semibold">⚠️ Error: {fileUploadError}</h2>
+        </div>
+      )}
+
+      {/* ✅ AI Chatbot Section (Ask Questions Based on Extracted Text) */}
+      {extractedText && (
+        <div className="text-center p-4 bg-gray-800 mt-6 rounded-lg">
+          <h2 className="text-lg font-semibold text-blue-400">💬 Ask AI About Your Taxes:</h2>
+          <AIChatbot extractedText={extractedText} onQuerySubmit={handleChatbotQuery} />
+        </div>
+      )}
+
+      {/* ✅ Show Chatbot Response */}
+      {chatbotResponse && (
+        <div className="text-center p-4 bg-gray-900 mt-6 rounded-lg shadow-md">
+          <h2 className="text-lg font-semibold text-green-400">🤖 AI Chatbot Answer:</h2>
+          <p className="text-sm text-gray-300 mt-2">{chatbotResponse}</p>
+        </div>
+      )}
+
+      {/* ✅ Tax Form Section (Auto-filled with OCR Data) */}
+      <TaxForm onSubmit={handleTaxCalculation} extractedText={extractedText} />
+
+      {/* ✅ Show Tax Result if Available */}
       {taxResult && (
         <div className="text-center p-4 bg-gray-900 mt-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold text-yellow-400">
@@ -40,7 +90,7 @@ function HomePage({ handleTaxCalculation, taxResult, taxError }) {
         </div>
       )}
 
-      {/* Show Error if Tax Calculation Fails */}
+      {/* ✅ Show Error if Tax Calculation Fails */}
       {taxError && (
         <div className="text-center p-4 bg-red-800 mt-6 rounded-lg">
           <h2 className="text-lg font-semibold">⚠️ Error: {taxError}</h2>
@@ -55,7 +105,11 @@ function HomePage({ handleTaxCalculation, taxResult, taxError }) {
 function App() {
   const [taxResult, setTaxResult] = useState(null);
   const [taxError, setTaxError] = useState(null);
+  const [extractedText, setExtractedText] = useState("");
+  const [fileUploadError, setFileUploadError] = useState(null);
+  const [chatbotResponse, setChatbotResponse] = useState("");
 
+  // ✅ Handle Tax Calculation
   const handleTaxCalculation = async (formData) => {
     try {
       setTaxError(null);
@@ -77,30 +131,80 @@ function App() {
     }
   };
 
+  // ✅ Handle File Upload & OCR Extraction
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setExtractedText("");  
+    setFileUploadError(null);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/upload-document", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("File upload failed");
+
+      const data = await response.json();
+      setExtractedText(data.extracted_text);
+    } catch (error) {
+      console.error("File Upload Error:", error);
+      setFileUploadError("Failed to extract text. Please try again.");
+    }
+  };
+
+  // ✅ Handle AI Chatbot Query
+  const handleChatbotQuery = async (question) => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/ask-ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ extracted_text: extractedText, question }),
+      });
+
+      if (!response.ok) throw new Error("Chatbot request failed");
+
+      const data = await response.json();
+      setChatbotResponse(data.answer);
+    } catch (error) {
+      console.error("Chatbot Error:", error);
+      setChatbotResponse("AI failed to answer. Please try again.");
+    }
+  };
+
   return (
     <Router>
       <Navbar />
       <Routes>
-        <Route
-          path="/"
+        <Route 
+          path="/" 
           element={
-            <HomePage
-              handleTaxCalculation={handleTaxCalculation}
-              taxResult={taxResult}
-              taxError={taxError}
+            <HomePage 
+              handleTaxCalculation={handleTaxCalculation} 
+              taxResult={taxResult} 
+              taxError={taxError} 
+              handleFileUpload={handleFileUpload} 
+              extractedText={extractedText} 
+              fileUploadError={fileUploadError} 
+              handleChatbotQuery={handleChatbotQuery}
+              chatbotResponse={chatbotResponse}
             />
-          }
+          } 
         />
         <Route path="/ai-chatbot" element={<AIChatbot />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-
-        {/* ✅ Add missing routes */}
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/contact" element={<ContactUs />} />
       </Routes>
-      <Footer /> {/* ✅ Footer appears only once here */}
+      <FloatingChatbot /> {/* ✅ Floating chatbot always visible */}
+      <Footer />
     </Router>
   );
 }
