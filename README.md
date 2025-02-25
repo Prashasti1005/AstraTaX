@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+# AstraTax - AI-Powered Tax Assistant
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+AstraTax is an AI-driven tax optimization and filing assistant that simplifies tax calculations, maximizes tax savings, and ensures compliance using machine learning and cloud-based technologies.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🛠️ Tech Stack
+### **Frontend**
+- React.js + Tailwind CSS
 
-### `npm start`
+### **Backend**
+- FastAPI (Python)
+- PostgreSQL for structured tax records
+- Google BigQuery for scalable ML queries
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### **AI & ML**
+- **Google Cloud Vision OCR**: Extracts data from financial documents.
+- **BigQuery ML**: Predicts tax deductions and optimizes filings.
+- **Graph Neural Networks (GNNs)**: Detects fraudulent transactions.
+- **Decision Trees & Random Forest**: Analyze audit risk factors.
+- **Gemini AI (NLP)**: Powers the tax chatbot.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 📦 Backend Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **1. Clone the Repository**
+```sh
+git clone https://github.com/yourusername/astratax.git
+cd astratax
+```
+### **2. Create Virtual Environment**
+```sh
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+```
+### **3. Install Dependencies**
+```sh
+pip install -r requirements.txt
+```
+### **4. Setup Environment Variables**
+Create a .env file inside the backend/ directory and add:
+```sh
+GOOGLE_CLOUD_VISION_API_KEY=your_google_api_key
+BIGQUERY_PROJECT_ID=your_bigquery_project_id
+DATABASE_URL=postgresql://username:password@localhost/db_name
+```
+### **5. Run FastAPI Server**
+```sh
+uvicorn main:app --reload
+```
+The backend runs on http://127.0.0.1:8000.
 
-### `npm run build`
+## 📦 Frontend Setup
+### **1.Install Dependencies**
+```sh
+cd frontend
+npm install
+```
+### **2.Setup Environment Variables**
+Create a .env file inside the frontend/ directory and add:
+```sh
+REACT_APP_BACKEND_URL=http://127.0.0.1:8000
+```
+### **3.Run React App**
+```sh
+npm start
+```
+The frontend runs on http://localhost:3000.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Running Tests
+### **Backend Tests**
+```sh
+pytest
+```
+### **Frontend Tests**
+```sh
+npm test
+```
+## 📦 Project Structure
+```sh
+/astratax
+ ├── /backend        # FastAPI backend
+ │   ├── main.py     # API endpoints
+ │   ├── models.py   # Database models
+ │   ├── utils.py  # Utility functions
+ │   ├── /services
+ │   │   ├── cloud_storage.py
+ │   │   ├── ocr.py
+ │   │   ├── tax_analysis.py
+ │   │   ├── tax_filing.py
+ │   ├── firebase_key.json
+ ├── /frontend       # React frontend
+ │   ├── src/
+ │   ├── App.js
+ │   ├── index.js
+ │   ├── tailwind.config.js
+ ├── /ml_models      # AI Models for tax optimization
+ ├── README.md       # This file
+ ├── .env.example    # Example environment file
+ ├── requirements.txt # Backend dependencies
+ ├── package.json # Frontend dependencies
+ ├── postcss.config.js
+ ├── .gitignore
+```
+##  Future Enhancements
+- Expand to global tax systems.
+- Introduce AI-powered financial advisory.
+- Implement voice-based tax consultation.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contact
+Prashasti Singh
+Email: b23224@students.iitmandi.ac.in

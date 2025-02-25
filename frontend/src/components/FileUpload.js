@@ -1,46 +1,83 @@
 import React, { useState } from "react";
-import axios from "axios";
 
-const FileUpload = ({ onUploadComplete }) => {
+const FileUpload = ({ onExtractedData }) => {
   const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [extractedText, setExtractedText] = useState("");
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+    setUploadMessage("");
+    setExtractedText("");
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file!");
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await axios.post("http://localhost:5000/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
-
-      alert("File uploaded successfully!");
-      onUploadComplete(response.data);
-    } catch (error) {
-      console.error("Upload failed", error);
-      alert("Upload failed!");
+    if (!file) {
+      setUploadMessage("⚠️ Please select a file first.");
+      return;
     }
 
-    setUploading(false);
+    try {
+      // ✅ Upload File
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadResponse = await fetch("http://127.0.0.1:8000/upload-file", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("File upload failed.");
+      }
+
+      setUploadMessage("✅ File uploaded successfully!");
+
+      // ✅ Trigger OCR Extraction
+      const ocrResponse = await fetch("http://127.0.0.1:8000/ocr", {
+        method: "POST",
+      });
+
+      if (!ocrResponse.ok) {
+        throw new Error("OCR extraction failed.");
+      }
+
+      const ocrData = await ocrResponse.json();
+      setExtractedText(ocrData.extracted_text || "No text detected.");
+
+      // ✅ Send Extracted Data to Tax Form
+      onExtractedData({ income: ocrData.income, deductions: ocrData.deductions });
+      
+    } catch (error) {
+      setUploadMessage(`❌ Error: ${error.message}`);
+    }
   };
 
   return (
-    <div className="p-4 bg-gray-900 text-white rounded-lg">
-      <input type="file" onChange={handleFileChange} className="mb-2" />
-      <button 
-        onClick={handleUpload} 
-        className="bg-yellow-500 px-4 py-2 rounded-lg"
-        disabled={uploading}
+    <div className="bg-gray-900 p-6 rounded-lg shadow-md text-center w-96 mx-auto">
+      <h2 className="text-lg font-semibold text-white mb-3">📄 Upload Tax Document</h2>
+      
+      <input
+        type="file"
+        onChange={handleFileChange}
+        className="block w-full text-sm text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-800"
+      />
+
+      <button
+        onClick={handleUpload}
+        className="mt-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded"
       >
-        {uploading ? "Uploading..." : "Upload Document"}
+        Upload & Extract Text
       </button>
+
+      {uploadMessage && <p className="mt-3 text-sm text-yellow-300">{uploadMessage}</p>}
+
+      {extractedText && (
+        <div className="mt-4 p-3 bg-gray-800 rounded text-white text-sm">
+          <h3 className="font-semibold">📜 Extracted Text:</h3>
+          <p className="mt-2">{extractedText}</p>
+        </div>
+      )}
     </div>
   );
 };
