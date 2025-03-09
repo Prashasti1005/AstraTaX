@@ -24,6 +24,11 @@ const Navbar = () => {
 
       {/* Sign In & Sign Up Buttons */}
       <div className="space-x-4">
+      <Link to="/SmartTaxWallet">
+          <button className="px-6 py-2 bg-gray-900 text-white font-bold rounded-lg shadow-md transition-transform duration-300 hover:scale-105 hover:bg-yellow-500 hover:text-black">
+            Smart Tax Wallet
+          </button>
+        </Link>
         <Link to="/SignIn">
           <button className="px-6 py-2 bg-yellow-500 text-black font-bold rounded-lg shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg">
             Sign In
