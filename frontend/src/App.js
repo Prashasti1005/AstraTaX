@@ -19,6 +19,7 @@ import FloatingChatbot from "./components/FloatingChatbot";
 import SmartTaxWallet from "./components/smartwallet"; 
 import OCRupload from "./components/AiTaxAnalyser"; 
 import AuditRiskAnalyzer from "./components/AuditRiskAnalyzer";
+import TaxFilingPage from "./components/TaxFiling";
 
 function HomePage({ 
   handleTaxCalculation, 
@@ -206,6 +207,7 @@ function App() {
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/audit-risk-analyzer" element={<AuditRiskAnalyzer />} />
+        <Route path="/taxfiling" element={<TaxFilingPage />} />
       </Routes>
       <FloatingChatbot /> {/* ✅ Floating chatbot always visible */}
       <Footer />
