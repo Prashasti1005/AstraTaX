@@ -16,6 +16,9 @@ import PrivacyPolicy from "./components/privacy";
 import TermsOfService from "./components/terms";
 import ContactUs from "./components/contact";
 import FloatingChatbot from "./components/FloatingChatbot"; 
+import SmartTaxWallet from "./components/smartwallet"; 
+import OCRupload from "./components/AiTaxAnalyser"; 
+import AuditRiskAnalyzer from "./components/AuditRiskAnalyzer";
 
 function HomePage({ 
   handleTaxCalculation, 
@@ -202,6 +205,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/audit-risk-analyzer" element={<AuditRiskAnalyzer />} />
       </Routes>
       <FloatingChatbot /> {/* ✅ Floating chatbot always visible */}
       <Footer />

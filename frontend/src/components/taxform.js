@@ -1,80 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { ShieldAlert, SearchCheck, FileBarChart } from "lucide-react";
 
-const TaxForm = ({ onSubmit, extractedData }) => {
-  const [income, setIncome] = useState("");
-  const [deductions, setDeductions] = useState("");
-  const [regime, setRegime] = useState("new");
+const auditFeatures = [
+  {
+    title: "Fraud Detection",
+    description: "AI-powered fraud risk scoring & anomaly detection.",
+    icon: <ShieldAlert size={48} className="text-yellow-400" />,
+  },
+  {
+    title: "Real-Time Audit",
+    description: "Instant tax health analysis with AI-powered insights.",
+    icon: <SearchCheck size={48} className="text-green-400" />,
+  },
+  {
+    title: "Risk Insights",
+    description: "AI-driven risk profiling for better tax planning.",
+    icon: <FileBarChart size={48} className="text-blue-400" />,
+  }
+];
 
-  // ✅ Auto-fill extracted data when it changes
-  useEffect(() => {
-    if (extractedData) {
-      setIncome(extractedData.income || "");
-      setDeductions(extractedData.deductions || "");
-    }
-  }, [extractedData]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit({ income: parseFloat(income), deductions: parseFloat(deductions), regime });
-  };
+const AuditSection = () => {
+  const navigate = useNavigate(); // React Router Navigation Hook
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
-      className="max-w-lg mx-auto p-8 rounded-2xl bg-gray-900 bg-opacity-80 backdrop-blur-lg shadow-xl border border-gray-700 text-center"
-    >
-      <h2 className="text-2xl font-bold text-yellow-400 mb-6 tracking-wide">
-        💰 Tax Calculator
+    <section className="py-16 bg-gradient-to-b from-gray-900 to-black text-white text-center">
+      {/* Section Heading */}
+      <h2 className="text-5xl font-extrabold tracking-wide text-yellow-400 drop-shadow-lg">
+        AI-Powered Audit Risk Analysis
       </h2>
 
-      {/* Income Input */}
-      <div className="mb-6">
-        <label className="block text-gray-300 text-sm font-medium mb-2">Income (₹)</label>
-        <input
-          type="number"
-          value={income}
-          onChange={(e) => setIncome(e.target.value)}
-          className="w-full p-3 text-lg rounded-lg bg-gray-800 text-white border border-gray-600 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 transition-shadow shadow-md"
-          placeholder="Enter your income"
-          required
-        />
+      {/* Feature Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 px-6 md:px-12 mt-12">
+        {auditFeatures.map((feature, index) => (
+          <div
+            key={index}
+            className="relative p-6 bg-gray-800/50 backdrop-blur-xl border border-gray-700 shadow-lg rounded-xl max-w-sm mx-auto transform transition hover:scale-105 hover:shadow-xl"
+          >
+            {/* Icon */}
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 p-4 rounded-full shadow-md border border-gray-700">
+              {feature.icon}
+            </div>
+
+            {/* Content */}
+            <div className="mt-12 text-center">
+              <h3 className="text-2xl font-semibold text-white">{feature.title}</h3>
+              <p className="text-gray-300 mt-4 text-lg leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Deductions Input */}
-      <div className="mb-6">
-        <label className="block text-gray-300 text-sm font-medium mb-2">Deductions (₹)</label>
-        <input
-          type="number"
-          value={deductions}
-          onChange={(e) => setDeductions(e.target.value)}
-          className="w-full p-3 text-lg rounded-lg bg-gray-800 text-white border border-gray-600 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 transition-shadow shadow-md"
-          placeholder="Enter your deductions"
-          required
-        />
-      </div>
-
-      {/* Tax Regime Dropdown */}
-      <div className="mb-6">
-        <label className="block text-gray-300 text-sm font-medium mb-2">Tax Regime</label>
-        <select
-          value={regime}
-          onChange={(e) => setRegime(e.target.value)}
-          className="w-full p-3 text-lg rounded-lg bg-gray-800 text-white border border-gray-600 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 transition-shadow shadow-md"
-        >
-          <option value="new">New Regime</option>
-          <option value="old">Old Regime</option>
-        </select>
-      </div>
-
-      {/* Submit Button */}
-      <button 
-        type="submit" 
-        className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold py-3 rounded-lg transition-all transform hover:scale-105 shadow-lg"
+      {/* Call-to-Action Button */}
+      <button
+        onClick={() => navigate("/audit-risk-analyzer")}
+        className="mt-14 px-10 py-4 text-lg font-semibold tracking-wide rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:opacity-90 transition-all shadow-2xl hover:shadow-cyan-400/50"
       >
-        ⚡ Calculate Tax
+        Analyze My Risk →
       </button>
-    </form>
+    </section>
   );
 };
 
-export default TaxForm;
+export default AuditSection;
