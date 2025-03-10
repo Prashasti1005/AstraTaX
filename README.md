@@ -82,15 +82,11 @@ npm test
 ```sh
 /astratax
  ├── /backend        # FastAPI backend
- │   ├── main.py     # API endpoints
- │   ├── models.py   # Database models
- │   ├── utils.py  # Utility functions
- │   ├── /services
- │   │   ├── cloud_storage.py
- │   │   ├── ocr.py
- │   │   ├── tax_analysis.py
- │   │   ├── tax_filing.py
+ │   ├── main.py    
+ │   ├── services
  │   ├── firebase_key.json
+ │   ├── .env
+ │   ├── app.py
  ├── /frontend       # React frontend
  │   ├── src/
  │   ├── App.js
