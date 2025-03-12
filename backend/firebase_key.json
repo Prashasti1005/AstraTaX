@@ -1,13 +1,13 @@
 {
   "type": "service_account",
   "project_id": "astratax-d0104",
-  "private_key_id": "63987c9c6b8dccdf9a899b682c05df42528774fc",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCgLuoIjlLw4dpK\nCD5MG/Abfi6RoAtOCrJLHVQSOwFfYCMrvTu6Ej275fjtq5oszPZyc0/cWMqKId/v\nhtTDg6S+VLIBEidmFYPxrWSnPA6VBytUvYaO6tZ7OnGMolti2IAcj3jj8GgA9L4/\nTVpKDjuXQp8uNqUatbA//Ho/4KqhBXdFwQ14/sxvves5mCrIs3nfbSEyj1apSI7T\nYgZDgsNSODq3j/LLU+jIMr8Xp1o0Y6fssZnqlEgJCBFamOK5C3u4vEX+1UYZOjcv\nJKBjhToxMu6k2J4s4n6crBRinwK0dZL0RsKWD+Aighuuft05zB20alqdGfWe8DKm\nywBM2KZNAgMBAAECggEAD22dWIAe0HksbXuARpPdS0SaxydvV0+z7wSu44ef4PgR\nQyX5kfkuTYH/uSKRWbXPGeRt4XcC4Q2UtE0cAo3UKQne0DgXp980I2u0OWBRNjzn\nyURs6KiJSnqtU6KSo0Ffi4CtH+U4mzj3dwDkDKR0zGOcEdctDVbJGEyg2LSyson9\nU+Rdkn57PCgHt1YNc1nCX+KpTbw2j6x2wmeTfBVujDv9gX/bcze4ky9KSe1CsbGQ\np+L+WtSX4332S6AIMedP0AkeZ7wO2xYKrUYj/Fw3+6345G1O4Ym81fJSRxAMmdu2\nPspU0slwWjDP21Bgk8mELgUZwvf2YhBj4xz8hiuGWQKBgQDc9vssE5o/eXAQkEkM\nhuZjHs33mWZ5yULv/gxuB8xoRW1ZCmHJbiqSc2cMJB8uduAUITmH7/7tJn9ZIhiA\nDZzQHjoQQv3p9h/YnMeQlbMizJbFRnHsGKt5jLFYT53hf3WjD5djhi+YtSR/o/Xn\nkToeiMiY93b1PMl91+KQw5TuNQKBgQC5lMuZralYPmmEv69i+7OcTDQ/wZfkrTRF\n1Ah4vsCZ0vKoRRF9kL3ponnmBdni7Ho+0ljsa8HYpVIb/sbmQaQ8chEfKP0+6R9E\nGzJqqOA93VOx9JzYgxcjP7pSkoUKs8FTEBt6oqXh/cJEi+Y7mdMKNdnLImNim+64\nenmxGU66uQKBgDEvWOGKy37tjSBivZ/oN0hBBx/iKYlaX2gEaMflPH7JVXnIcdPg\njeFjhsCRGc/B7kcMzj2QEnK/awFwMXvvi8RXth0AjHyTqKsS2uk4KVPJrpXjBGDF\nbQX1Z1R9BGu5b3oIcm5Y5Cddyu4OlSIilYlOcTh7fSNBkKhOccQ/hNsxAoGAbHCk\n0+TlGlpF4Dr96hH37vGcalDeR9JpxA/U73FPK9NW1bqeMMgeIOI+5okuu2nBOOpC\n6ctBly1rIE6svKlIpcVledbCvDsOeQaHXEnX1m541HiCGgXnxEIdxtg1A37sDXRR\nCkT2N2rHVLSG0PbemY3D+O3cMye4w3VVnIWUOokCgYAW9KtQJ5c5kyewtL27Ry6L\nfAy22b5YIRD9v1UlIuqnwpxLBJGFaWx0UHQEi/UshS8Op6VtqnFmDLFA8pTF41ID\nb7lRO/2BswbEykjWKyuIpUi7HwMlTcawDZIzhFRlCnUfP0xhgjgzH0lk+L1YBBEK\nvCEnyE54FP4tnCdN9rF8hg==\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-fbsvc@astratax-d0104.iam.gserviceaccount.com",
-  "client_id": "112890197545355914339",
+  "private_key_id": "REDACTED",
+  "private_key": "REDACTED",
+  "client_email": "REDACTED",
+  "client_id": "REDACTED",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40astratax-d0104.iam.gserviceaccount.com",
+  "client_x509_cert_url": "REDACTED",
   "universe_domain": "googleapis.com"
 }
